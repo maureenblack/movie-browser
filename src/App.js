@@ -10,23 +10,28 @@ import RemoveFavorites from './components/RemoveFaves';
 const App = () => {
 	const [movies, setMovies] = useState([]);
 	const [favorites, setFavorites] = useState([]);
-	const [searchValue, setSearchValue] = useState('');
+	const [searchValue, setSearchValue] = useState('man');
 
 	const getMovieRequest = async (searchValue) => {
-		const url = `http://www.omdbapi.com/?s=${searchValue}&key=5c2abb11`;
+        try{
+            const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=5c2abb11`;
+
+            const response = await fetch(url);
+            const responseJson = await response.json();
+
         
+    
+            if (responseJson.Search) {
+                setMovies(responseJson.Search);
+            }
+        }catch(e){
+            console.log("Error",e);
+        }
 
-		const response = await fetch(url);
-		const responseJson = await response.json();
-
-		if (responseJson.Search) {
-			setMovies(responseJson.Search);
-		}
 	};
-
 	useEffect(() => {
 		getMovieRequest(searchValue);
-	}, [searchValue]);
+	}, []);
 
 	useEffect(() => {
 		const movieFavorites = JSON.parse(
