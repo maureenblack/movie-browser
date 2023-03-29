@@ -8,7 +8,7 @@ const AddFavorite = () => {
 				width='1em'
 				height='1em'
 				viewBox='0 0 16 16'
-				class='bi bi-heart-fill'
+				className='bi bi-heart-fill'
 				fill='red'
 				xmlns='http://www.w3.org/2000/svg'
 			>
@@ -20,5 +20,4 @@ const AddFavorite = () => {
 		</>
 	);
 };
-
 export default AddFavorite;

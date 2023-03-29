@@ -13,20 +13,27 @@ const App = () => {
 	const [searchValue, setSearchValue] = useState('man');
 
 	const getMovieRequest = async (searchValue) => {
-        try{
-            const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=5c2abb11`;
+		try {
+			const url = `http://www.omdbapi.com/?s=${searchValue}&apikey=5c2abb11`;
 
-            const response = await fetch(url);
-            const responseJson = await response.json();
 
-        
-    
-            if (responseJson.Search) {
-                setMovies(responseJson.Search);
-            }
-        }catch(e){
-            console.log("Error",e);
-        }
+			// for (let i = 0; i < 10; i++) {
+			// 	const response = await fetch(url);
+			// 	const responseJson = await response.json();
+			// }
+
+				const response = await fetch(url);
+				const responseJson = await response.json();
+
+
+			if (responseJson.Search) {
+				setMovies(responseJson.Search);
+			} else {
+				console.log(responseJson);
+			}
+		} catch (e) {
+			console.log("Error", e);
+		}
 
 	};
 	useEffect(() => {
@@ -48,9 +55,12 @@ const App = () => {
 	};
 
 	const addFavouriteMovie = (movie) => {
-		const newFavoriteList = [...favorites, movie];
-		setFavorites(newFavoriteList);
-		saveToLocalStorage(newFavoriteList);
+
+		if (!favorites.map(movie => movie.imdbID).includes(movie.imdbID)) {
+			const newFavoriteList = [...favorites, movie];
+			setFavorites(newFavoriteList);
+			saveToLocalStorage(newFavoriteList);
+		}
 	};
 
 	const removeFavoriteMovie = (movie) => {
@@ -70,9 +80,10 @@ const App = () => {
 			</div>
 			<div className='row'>
 				<MovieList
+					name={'regular'}
 					movies={movies}
 					handleFavoritesClick={addFavouriteMovie}
-					favouriteComponent={AddFavorites}
+					favouriteComponent={<AddFavorites />}
 				/>
 			</div>
 			<div className='row d-flex align-items-center mt-4 mb-4'>
@@ -80,9 +91,10 @@ const App = () => {
 			</div>
 			<div className='row'>
 				<MovieList
+					name={'favorites'}
 					movies={favorites}
 					handleFavoritesClick={removeFavoriteMovie}
-					favouriteComponent={RemoveFavorites}
+					favouriteComponent={<RemoveFavorites />}
 				/>
 			</div>
 		</div>
